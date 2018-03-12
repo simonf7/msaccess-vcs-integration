@@ -45,7 +45,8 @@ End Function
 ' Main entry point for EXPORT. Export all forms, reports, queries,
 ' macros, modules, and lookup tables to `source` folder under the
 ' database's folder.
-Public Sub ExportAllSource()
+' to_path - specify the destination folder, should end with trailing \
+Public Sub ExportAllSource(Optional to_path As String)
     Dim Db As Object ' DAO.Database
     Dim source_path As String
     Dim obj_path As String
@@ -65,7 +66,12 @@ Public Sub ExportAllSource()
     CloseFormsReports
     'InitVCS_UsingUcs2
 
-    source_path = VCS_Dir.VCS_ProjectPath() & "source\"
+    ' if a path has been passed, use that
+    If Not IsMissing(to_path) Then
+        source_path = to_path
+    Else
+        source_path = VCS_Dir.VCS_ProjectPath() & "source\"
+    End If
     VCS_Dir.VCS_MkDirIfNotExist source_path
 
     Debug.Print
